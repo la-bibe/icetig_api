@@ -1,0 +1,4 @@
+doc_homepage:
+    path: /
+    defaults:
+        _controller: Icetig\Bundle\WebBundle\Controller\DefaultController:index

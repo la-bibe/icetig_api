@@ -3,9 +3,8 @@
     "license": "proprietary",
     "type": "project",
     "autoload": {
-        "psr-4": {
-            "AppBundle\\": "src/AppBundle"
-        },
+        "psr-0": { "": "src/" },
+        "psr-4": { "Icetig\\": "src/" },
         "classmap": [
             "app/AppKernel.php",
             "app/AppCache.php"
