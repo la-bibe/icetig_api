@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity repository-class="Icetig\Bundle\ApiBundle\Repository\AccessRepository" name="Icetig\Bundle\ApiBundle\Entity\Access">
+    <id name="id" type="integer" column="id">
+      <generator strategy="AUTO"/>
+    </id>
+
+    <field name="accessToken" column="access_token" />
+
+    <field name="signatureToken" column="signature_token" />
+
+    <field name="generationDate" column="generation_date" type="datetime" />
+
+    <field name="expirationDate" column="expiration_date" type="datetime" />
+
+    <many-to-one target-entity="Icetig\Bundle\UserBundle\Entity\User" field="user">
+      <join-column name="access_user_id" referenced-column-name="id" />
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

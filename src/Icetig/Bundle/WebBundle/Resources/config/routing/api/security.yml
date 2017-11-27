@@ -1,0 +1,5 @@
+api_security_access_get:
+    path: /access
+    methods: [GET]
+    defaults:
+        _controller: ApiBundle:Security:getAccess

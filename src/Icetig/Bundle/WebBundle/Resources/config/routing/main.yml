@@ -1,12 +1,7 @@
-homepage:
-    path: /
-    defaults:
-        _controller: Icetig\Bundle\WebBundle\Controller\DefaultController:indexAction
-
 doc:
     resource: "@WebBundle/Resources/config/routing/doc/main.yml"
     prefix:   /doc
 
 web:
     resource: "@WebBundle/Resources/config/routing/api/main.yml"
-    prefix:   /api
+    prefix:   /

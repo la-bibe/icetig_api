@@ -10,9 +10,10 @@ services:
         autoconfigure: true
         public: false
 
-    Icetig\Bundle\WebBundle\:
-        resource: '../../src/Icetig/Bundle/WebBundle/*'
-        exclude: '../../src/Icetig/Bundle/WebBundle/{Entity,Repository,Tests}'
+    Icetig\Bundle\ApiBundle\Controller\:
+        resource: '../../src/Icetig/Bundle/ApiBundle/Controller'
+        public: true
+        tags: ['controller.service_arguments']
 
     Icetig\Bundle\WebBundle\Controller\:
         resource: '../../src/Icetig/Bundle/WebBundle/Controller'

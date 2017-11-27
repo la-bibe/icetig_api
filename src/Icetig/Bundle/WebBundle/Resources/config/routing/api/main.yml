@@ -1,4 +1,8 @@
+api_security:
+    prefix: /security
+    resource: "@WebBundle/Resources/config/routing/api/security.yml"
+
 api_homepage:
     path: /
     defaults:
-        _controller: Icetig\Bundle\WebBundle\Controller\DefaultController:index
+        _controller: ApiBundle:Default:index

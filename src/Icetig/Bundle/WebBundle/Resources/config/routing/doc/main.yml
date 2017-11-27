@@ -1,4 +1,5 @@
 doc_homepage:
     path: /
     defaults:
-        _controller: Icetig\Bundle\WebBundle\Controller\DefaultController:index
+        _controller: WebBundle:Default:index
+# TODO DocBundle (auto ?)
