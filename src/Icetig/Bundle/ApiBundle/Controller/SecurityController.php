@@ -42,7 +42,7 @@ class SecurityController extends AbstractApiController
             $access->getExpirationDate(),
             '/',
             null,
-            false
+            true
         );
 
         $response->headers->setCookie($accessCookie);
@@ -72,7 +72,7 @@ class SecurityController extends AbstractApiController
             -1,
             '/',
             null,
-            false
+            true
         );
 
         $response->headers->setCookie($resetAccessCookie);
