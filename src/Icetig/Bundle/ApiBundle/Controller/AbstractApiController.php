@@ -2,11 +2,15 @@
 
 namespace Icetig\Bundle\ApiBundle\Controller;
 
+use Icetig\Bundle\ApiBundle\Entity\Access;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 abstract class AbstractApiController extends Controller
 {
+    const ACCESS_TOKEN_COOKIE_NAME = 'access_token';
     const HTTP_CODES = [
         100 => 'Continue',
         101 => 'Switching Protocols',
@@ -127,12 +131,28 @@ abstract class AbstractApiController extends Controller
         );
 
         if (401 === $responseStatus) {
-            $response->headers->set('WWW-Authenticate', 'Basic realm:"' . isset($details['www-authenticate']) ? $details['www-authenticate'] : '' . '"');
+            $wwwAuthenticateValue = 'Basic realm:"';
+            $wwwAuthenticateValue .= isset($details['www-authenticate']) ?
+                $details['www-authenticate'] :
+                'Can\'t access to the resource without proper authentication';
+            $wwwAuthenticateValue .= '"';
+            $response->headers->set('WWW-Authenticate', $wwwAuthenticateValue);
         }
 
         return $response;
     }
 
+    /**
+     * Simply return a JsonResponse but set some mandatory headers before
+     * returning it
+     *
+     * @param null  $data
+     * @param int   $status
+     * @param array $headers
+     * @param bool  $json
+     *
+     * @return JsonResponse
+     */
     protected function getApiJsonResponse($data = null, $status = 200, $headers = array(), $json = false)
     {
         $response = new JsonResponse($data, $status, $headers, $json);
@@ -140,5 +160,63 @@ abstract class AbstractApiController extends Controller
         $response->headers->set('Access-Control-Allow-Origin', '*');
 
         return $response;
+    }
+
+    /**
+     * Generate empty response but with good mandatory headers
+     *
+     * @return Response
+     */
+    protected function getApiEmptyResponse()
+    {
+        return new Response(
+            '',
+            204,
+            [
+                'Access-Control-Allow-Origin' => '*',
+            ]
+        );
+    }
+
+    /**
+     * Try to authenticate the user based on the request
+     *
+     * @param Request $request
+     *
+     * @return Access|null
+     */
+    protected function autoAuthenticate(Request $request)
+    {
+        $accessRepository = $this->getDoctrine()->getRepository('ApiBundle:Access');
+        $securityProvider = $this->get('icetig_api.provider.security');
+
+        if (
+            null !== ($authorizationHeader = $request->headers->get('Authorization'))
+            && ($authorizationHeader = explode(' ', $authorizationHeader))
+            && 2 === count($authorizationHeader)
+            && ($hmacOptions = explode(',', $authorizationHeader[1]))
+            && 'HMAC' === $authorizationHeader[0]
+            && null !== ($accessToken = $request->cookies->get(self::ACCESS_TOKEN_COOKIE_NAME))
+            && ($access = $accessRepository->findOneBy(['accessToken' => $accessToken])) instanceof Access
+        ) {
+            $hmacOptionsArray = [];
+
+            foreach ($hmacOptions as $hmacOption) {
+                if (
+                    ($hmacOptionArray = explode('=', $hmacOption))
+                    && 2 === count($hmacOptionArray)
+                ) {
+                    $hmacOptionsArray[$hmacOptionArray[0]] = $hmacOptionArray[1];
+                }
+            }
+
+            $hmacOptionsArray['key'] = $access->getSignatureToken();
+
+            if ($securityProvider->isWellSignedRequest($hmacOptionsArray, $request)) {
+                return $access;
+            }
+        }
+
+        return null;
     }
 }

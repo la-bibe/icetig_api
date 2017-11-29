@@ -3,3 +3,9 @@ api_security_access_get:
     methods: [GET]
     defaults:
         _controller: ApiBundle:Security:getAccess
+
+api_security_access_delete:
+    path: /access
+    methods: [DELETE]
+    defaults:
+        _controller: ApiBundle:Security:deleteAccess

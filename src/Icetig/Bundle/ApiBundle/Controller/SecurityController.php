@@ -2,9 +2,9 @@
 
 namespace Icetig\Bundle\ApiBundle\Controller;
 
+use Icetig\Bundle\ApiBundle\Entity\Access;
 use Icetig\Bundle\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Cookie;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class SecurityController extends AbstractApiController
@@ -37,15 +37,45 @@ class SecurityController extends AbstractApiController
         ]);
 
         $accessCookie = new Cookie(
-            'access_token',
+            self::ACCESS_TOKEN_COOKIE_NAME,
             $access->getAccessToken(),
             $access->getExpirationDate(),
             '/',
             null,
-            true
+            false
         );
 
         $response->headers->setCookie($accessCookie);
+
+        return $response;
+    }
+
+    public function deleteAccessAction(Request $request)
+    {
+        $access = $this->autoAuthenticate($request);
+
+        if (!$access instanceof Access) {
+            return $this->getJsonErrorResponse([401]);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+
+        $access->setExpirationDate(new \DateTime());
+        $em->persist($access);
+        $em->flush();
+
+        $response = $this->getApiEmptyResponse();
+
+        $resetAccessCookie = new Cookie(
+            self::ACCESS_TOKEN_COOKIE_NAME,
+            '',
+            -1,
+            '/',
+            null,
+            false
+        );
+
+        $response->headers->setCookie($resetAccessCookie);
 
         return $response;
     }
