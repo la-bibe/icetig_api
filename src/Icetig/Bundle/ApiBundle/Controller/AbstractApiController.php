@@ -157,7 +157,8 @@ abstract class AbstractApiController extends Controller
     {
         $response = new JsonResponse($data, $status, $headers, $json);
 
-        $response->headers->set('Access-Control-Allow-Origin', '*');
+        $response->headers->set('Access-Control-Allow-Origin', 'http://localhost:4200');
+        $response->headers->set('Access-Control-Allow-Credentials', 'true');
 
         return $response;
     }
@@ -173,7 +174,8 @@ abstract class AbstractApiController extends Controller
             '',
             204,
             [
-                'Access-Control-Allow-Origin' => '*',
+                'Access-Control-Allow-Origin' => 'http://localhost:4200',
+                'Access-Control-Allow-Credentials' => 'true',
             ]
         );
     }
@@ -200,7 +202,6 @@ abstract class AbstractApiController extends Controller
             && ($access = $accessRepository->findOneBy(['accessToken' => $accessToken])) instanceof Access
         ) {
             $hmacOptionsArray = [];
-
             foreach ($hmacOptions as $hmacOption) {
                 if (
                     ($hmacOptionArray = explode('=', $hmacOption))

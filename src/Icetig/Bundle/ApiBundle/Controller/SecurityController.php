@@ -73,7 +73,7 @@ class SecurityController extends AbstractApiController
             '/',
             null,
             true
-        );
+       	);
 
         $response->headers->setCookie($resetAccessCookie);
 
