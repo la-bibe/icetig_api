@@ -24,7 +24,9 @@ class SecurityController extends AbstractApiController
 
         $accessRepository = $this->getDoctrine()->getRepository('ApiBundle:Access');
 
-        $access = $accessRepository->createNew($authenticated);
+        $delay = $request->get('stay_connected') ? 'P1m' : 'PT20M';
+        $access = $accessRepository->createNew($authenticated, $delay);
+
         $access->setAccessToken($securityProvider->getRandomToken());
         $access->setSignatureToken($securityProvider->getRandomToken());
 
