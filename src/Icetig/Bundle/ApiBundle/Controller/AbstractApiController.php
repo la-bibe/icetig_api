@@ -157,9 +157,6 @@ abstract class AbstractApiController extends Controller
     {
         $response = new JsonResponse($data, $status, $headers, $json);
 
-        $response->headers->set('Access-Control-Allow-Origin', 'http://localhost:4200');
-        $response->headers->set('Access-Control-Allow-Credentials', 'true');
-
         return $response;
     }
 
@@ -172,11 +169,7 @@ abstract class AbstractApiController extends Controller
     {
         return new Response(
             '',
-            204,
-            [
-                'Access-Control-Allow-Origin' => 'http://localhost:4200',
-                'Access-Control-Allow-Credentials' => 'true',
-            ]
+            204
         );
     }
 
