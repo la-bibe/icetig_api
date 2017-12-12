@@ -16,8 +16,12 @@ use Icetig\Bundle\UserBundle\Entity\User;
  */
 class AccessRepository extends EntityRepository
 {
-    public function createNew(User $user, $expirationDelay = "PT20M")
+    public function createNew(User $user, $expirationDelay = null)
     {
+        if (null === $expirationDelay) {
+            $expirationDelay = "PT20M";
+        }
+
         $access = new Access();
 
         $expirationDate = new DateTime();
