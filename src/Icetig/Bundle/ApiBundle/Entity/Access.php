@@ -135,8 +135,8 @@ class Access
         $data = [];
         $data['user'] = $this->user->getData();
         $data['signatureToken'] = $this->signatureToken;
-        $data['generationDate'] = $this->generationDate;
-        $data['expirationDate'] = $this->expirationDate;
+        $data['generationDate'] = $this->generationDate->getTimestamp();
+        $data['expirationDate'] = $this->expirationDate->getTimestamp();
 
         return $data;
     }
