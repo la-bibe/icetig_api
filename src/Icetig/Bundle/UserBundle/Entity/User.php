@@ -3,6 +3,7 @@
 namespace Icetig\Bundle\UserBundle\Entity;
 
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class User
 {
@@ -45,6 +46,11 @@ class User
      * @var string
      */
     protected $phone;
+
+    /**
+     * @var Group[]|ArrayCollection
+     */
+    protected $groups;
 
     /**
      * Get id
@@ -168,14 +174,66 @@ class User
         $this->phone = $phone;
     }
 
+    /**
+     * @return ArrayCollection|Group[]
+     */
+    public function getGroups()
+    {
+        return $this->groups;
+    }
+
+    /**
+     * @param ArrayCollection|Group[] $groups
+     */
+    public function setGroups($groups)
+    {
+        $this->groups = $groups;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPermissions()
+    {
+        $permissionsArray = [];
+
+        if (null !== $this->groups) {
+            foreach ($this->groups as $group) {
+                foreach ($group->getPermissionArray() as $name => $permission) {
+                    if (!isset($permissionsArray[$name])) {
+                        $permissionsArray[$name] = [];
+                    }
+                    foreach (GroupPermission::ACL_TYPES as $acl => $value) {
+                        if (!isset($permissionsArray[$name][$acl])) {
+                            $permissionsArray[$name][$acl] = false;
+                        }
+                        $permissionsArray[$name][$acl] |= $permission[$acl];
+                    }
+                }
+            }
+        }
+
+        return $permissionsArray;
+    }
+
     public function getData()
     {
         $data = [];
+        $data['id'] = $this->id;
         $data['email'] = $this->email;
         $data['firstName'] = $this->firstName;
         $data['lastName'] = $this->lastName;
         $data['dateOfBirth'] = $this->dateOfBirth;
         $data['phone'] = $this->dateOfBirth;
+        $data['groups'] = [];
+
+        if (null !== $this->groups) {
+            foreach ($this->groups as $group) {
+                $data['groups'][] = $group->getData();
+            }
+        }
+
+        $data['permissions'] = $this->getPermissions();
 
         return $data;
     }

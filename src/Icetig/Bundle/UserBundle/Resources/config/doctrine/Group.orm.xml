@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping
+        xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+  <entity name="Icetig\Bundle\UserBundle\Entity\Group" table="`group`" >
+    <id name="id" type="integer" column="id" >
+      <generator/>
+    </id>
+
+    <field name="name" unique="true" />
+
+    <one-to-many target-entity="Icetig\Bundle\UserBundle\Entity\GroupPermission" mapped-by="group" field="permissions" />
+
+    <many-to-one target-entity="Icetig\Bundle\UserBundle\Entity\Group" field="parent">
+      <join-column name="parent_id" />
+    </many-to-one>
+
+    <many-to-many field="users" target-entity="Icetig\Bundle\UserBundle\Entity\User">
+      <join-table name="user_group">
+        <join-columns>
+          <join-column name="group_id" />
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="user_id" />
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
+
+  </entity>
+
+</doctrine-mapping>

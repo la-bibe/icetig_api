@@ -18,5 +18,7 @@
     <field name="dateOfBirth" column="date_of_birth" nullable="true" type="datetime" />
 
     <field name="phone" nullable="true" />
+
+    <many-to-many target-entity="Icetig\Bundle\UserBundle\Entity\Group" field="groups" mapped-by="users" />
   </entity>
 </doctrine-mapping>
