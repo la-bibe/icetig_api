@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping
+        xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+  <entity name="Icetig\Bundle\UserBundle\Entity\GroupPermission">
+
+    <id name="id" type="integer" column="id" >
+      <generator/>
+    </id>
+
+    <field name="permission" />
+
+    <field name="acl" type="integer" />
+
+    <many-to-one target-entity="Icetig\Bundle\UserBundle\Entity\Group" field="group" inversed-by="permissions">
+      <join-column name="group_id" />
+    </many-to-one>
+  </entity>
+
+</doctrine-mapping>
