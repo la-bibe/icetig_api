@@ -3,6 +3,7 @@
 namespace Icetig\Bundle\ApiBundle\Provider;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Icetig\Bundle\UserBundle\Entity\Group;
 use Icetig\Bundle\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -71,5 +72,34 @@ class SecurityProvider
         $checkHash = hash_hmac(self::ALLOWED_HMAC_ALGORITHMS[$algo], $data, $key);
 
         return hash_equals($checkHash, $hash);
+    }
+
+    public function isActionAuthorized(string $action, User $authenticated, User $subject = null, array $actionsAcl = [])
+    {
+        if (!isset($actionsAcl[$action]))
+            return false;
+
+        $permissions = $authenticated->getPermissions();
+
+        foreach ($actionsAcl[$action] as $neededPermission => $acl) {
+            if (!isset($permissions[$neededPermission]))
+                return false;
+            foreach ($acl as $ace) {
+                if (isset($permissions[$neededPermission]['*'])
+                    && isset($permissions[$neededPermission]['*'][$ace])
+                    && $permissions[$neededPermission]['*'][$ace])
+                    continue;
+                if ($subject === null)
+                    return false;
+                foreach ($subject->getGroups() as $group) {
+                    if ($group instanceof Group
+                        && (!isset($permissions[$neededPermission][$group])
+                            || !isset($permissions[$neededPermission][$group][$ace])
+                            || !$permissions[$neededPermission][$group][$ace]))
+                        return false;
+                }
+            }
+        }
+        return true;
     }
 }

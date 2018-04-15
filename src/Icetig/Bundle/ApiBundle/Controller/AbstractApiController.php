@@ -243,7 +243,9 @@ abstract class AbstractApiController extends Controller
      */
     protected function isActionAuthorized(string $action, User $authenticated, User $subject = null)
     {
-        // TODO
-        return true;
+        $actionsAcl = $this->container->getParameter('actions_acl');
+        $securityProvider = $this->get('icetig_api.provider.security');
+
+        return $securityProvider->isActionAuthorized($action, $authenticated, $subject, $actionsAcl);
     }
 }
