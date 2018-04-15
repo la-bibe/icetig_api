@@ -32,6 +32,11 @@ class Group
     protected $permissions;
 
     /**
+     * @var GroupPermission[]|ArrayCollection
+     */
+    protected $subjectedPermissions;
+
+    /**
      * @return int
      */
     public function getId(): int
@@ -151,5 +156,21 @@ class Group
         $data['parent'] = null !== $this->parent ? $this->parent->getData() : null;
 
         return $data;
+    }
+
+    /**
+     * @return ArrayCollection|GroupPermission[]
+     */
+    public function getSubjectedPermissions()
+    {
+        return $this->subjectedPermissions;
+    }
+
+    /**
+     * @param ArrayCollection|GroupPermission[] $subjectedPermissions
+     */
+    public function setSubjectedPermissions($subjectedPermissions)
+    {
+        $this->subjectedPermissions = $subjectedPermissions;
     }
 }

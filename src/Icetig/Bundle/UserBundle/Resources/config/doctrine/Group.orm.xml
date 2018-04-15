@@ -13,6 +13,8 @@
 
     <one-to-many target-entity="Icetig\Bundle\UserBundle\Entity\GroupPermission" mapped-by="group" field="permissions" />
 
+    <one-to-many target-entity="Icetig\Bundle\UserBundle\Entity\GroupPermission" mapped-by="subjectGroup" field="subjectedPermissions" />
+
     <many-to-one target-entity="Icetig\Bundle\UserBundle\Entity\Group" field="parent">
       <join-column name="parent_id" />
     </many-to-one>

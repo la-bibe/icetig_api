@@ -31,7 +31,7 @@ class SecurityProvider
                 if (
                     $user instanceof User
                     && null !== ($password = $user->getPassword())
-                    && hash('sha512', "{$credentials[1]}{$user->getSalt()}") === $password
+                    && hash_equals(hash('sha512', "{$credentials[1]}{$user->getSalt()}"), $password)
                 ) {
                     return $user;
                 }

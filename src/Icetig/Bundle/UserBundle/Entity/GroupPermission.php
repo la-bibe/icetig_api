@@ -31,10 +31,16 @@ class GroupPermission
      */
     protected $group;
 
-    public function __construct($permission, Group $group, int $acl = null)
+    /**
+     * @var Group | null
+     */
+    protected $subjectGroup;
+
+    public function __construct($permission, Group $group, int $acl = null, Group $subjectGroup = null)
     {
         $this->permission = $permission;
         $this->group = $group;
+        $this->subjectGroup = $subjectGroup;
         $this->acl = $acl ?? 0;
     }
 
@@ -102,5 +108,21 @@ class GroupPermission
     public function setGroup(Group $group)
     {
         $this->group = $group;
+    }
+
+    /**
+     * @return Group|null
+     */
+    public function getSubjectGroup()
+    {
+        return $this->subjectGroup;
+    }
+
+    /**
+     * @param Group|null $subjectGroup
+     */
+    public function setSubjectGroup($subjectGroup)
+    {
+        $this->subjectGroup = $subjectGroup;
     }
 }
