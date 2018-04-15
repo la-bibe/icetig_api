@@ -125,14 +125,20 @@ class Group
         foreach ($permissions as $permission) {
             if ($permission instanceof GroupPermission) {
                 $name = $permission->getPermission();
-                if (!isset($permissionsArray[$name])) {
-                    $permissionsArray[$name] = [];
+                $id = $permission->getId();
+                if (!isset($permissionsArray[$id])) {
+                    $subject = $permission->getSubjectGroup();
+                    $permissionsArray[$id] = [
+                        'name' => $name,
+                        'subject' => $subject ? $subject->getId() : null,
+                        'acl' => [],
+                    ];
                 }
                 foreach (GroupPermission::ACL_TYPES as $acl => $value) {
-                    if (!isset($permissionsArray[$name][$acl])) {
-                        $permissionsArray[$name][$acl] = false;
+                    if (!isset($permissionsArray[$id]['acl'][$acl])) {
+                        $permissionsArray[$id]['acl'][$acl] = false;
                     }
-                    $permissionsArray[$name][$acl] |= $permission->getSpecificAcl($acl);
+                    $permissionsArray[$id]['acl'][$acl] |= $permission->getSpecificAcl($acl);
                 }
             }
         }

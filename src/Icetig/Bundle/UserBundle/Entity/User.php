@@ -195,21 +195,27 @@ class User
      */
     public function getPermissions()
     {
-        $permissionsArray = [];
+        $fullPermissionsArray = [];
 
         if (null !== $this->groups) {
-            foreach ($this->groups as $group) {
-                foreach ($group->getPermissionArray() as $name => $permission) {
-                    if (!isset($permissionsArray[$name])) {
-                        $permissionsArray[$name] = [];
-                    }
-                    foreach (GroupPermission::ACL_TYPES as $acl => $value) {
-                        if (!isset($permissionsArray[$name][$acl])) {
-                            $permissionsArray[$name][$acl] = false;
-                        }
-                        $permissionsArray[$name][$acl] |= $permission[$acl];
-                    }
+            foreach ($this->groups as $group)
+                $fullPermissionsArray = array_merge($fullPermissionsArray, $group->getPermissionArray());
+        }
+
+        $permissionsArray = [];
+
+        foreach ($fullPermissionsArray as $permission) {
+            $name = $permission['name'];
+            $subject = $permission['subject'] ?? '*';
+            if (!isset($permissionsArray[$name]))
+                $permissionsArray[$name] = [];
+            if (!isset($permissionsArray[$name][$subject]))
+                $permissionsArray[$name][$subject] = [];
+            foreach (GroupPermission::ACL_TYPES as $acl => $value) {
+                if (!isset($permissionsArray[$name][$subject][$acl])) {
+                    $permissionsArray[$name][$subject][$acl] = false;
                 }
+                $permissionsArray[$name][$subject][$acl] |= $permission['acl'][$acl];
             }
         }
 
