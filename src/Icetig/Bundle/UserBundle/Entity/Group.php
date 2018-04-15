@@ -97,7 +97,7 @@ class Group
      */
     public function getPermissions()
     {
-        $permissions = $this->permissions;
+        $permissions = $this->permissions ? $this->permissions->toArray() : [];
 
         if (null !== $this->parent) {
             $parentPermission = $this->parent->getPermissions();
@@ -117,7 +117,7 @@ class Group
         if (null !== $this->parent) {
             $parentPermission = $this->parent->getPermissions();
             if (!empty($parentPermission))
-                $permissions = array_merge($permissions, $parentPermission->toArray());
+                $permissions = array_merge($permissions, $parentPermission);
         }
 
         $permissionsArray = [];
