@@ -19,11 +19,11 @@ class UserController extends AbstractApiController
         if (!$user instanceof User)
             return $this->getJsonErrorResponse([404]);
 
-        if ($user->getId() === $authenticated->getId())
-            if (!$this->isActionAuthorized('read_own_user', $authenticated, $user))
+        if ($user->getId() === $authenticated->getId()) {
+            if (!$this->isActionAuthorized('read_own_user', $authenticated))
                 return $this->getJsonErrorResponse([403]);
-            else if (!$this->isActionAuthorized('read_group_user', $authenticated, $user))
-                return $this->getJsonErrorResponse([403]);
+        } else if (!$this->isActionAuthorized('read_group_user', $authenticated))
+            return $this->getJsonErrorResponse([403]);
 
         return $this->getApiJsonResponse([
             'data' => $user->getData(),
@@ -42,11 +42,11 @@ class UserController extends AbstractApiController
         if (!$user instanceof User)
             return $this->getJsonErrorResponse([404]);
 
-        if ($user->getId() === $authenticated->getId())
-            if (!$this->isActionAuthorized('read_own_user_sanctions', $authenticated, $user))
+        if ($user->getId() === $authenticated->getId()) {
+            if (!$this->isActionAuthorized('read_own_user_sanctions', $authenticated))
                 return $this->getJsonErrorResponse([403]);
-            else if (!$this->isActionAuthorized('read_group_user_sanctions', $authenticated, $user))
-                return $this->getJsonErrorResponse([403]);
+        } else if (!$this->isActionAuthorized('read_group_user_sanctions', $authenticated))
+            return $this->getJsonErrorResponse([403]);
 
         return $this->getApiJsonResponse([
             'data' => $user->getSanctionsData(),
@@ -65,11 +65,11 @@ class UserController extends AbstractApiController
         if (!$user instanceof User)
             return $this->getJsonErrorResponse([404]);
 
-        if ($user->getId() === $authenticated->getId())
-            if (!$this->isActionAuthorized('read_own_user_permissions', $authenticated, $user))
+        if ($user->getId() === $authenticated->getId()) {
+            if (!$this->isActionAuthorized('read_own_user_permissions', $authenticated))
                 return $this->getJsonErrorResponse([403]);
-            else if (!$this->isActionAuthorized('read_group_user_permissions', $authenticated, $user))
-                return $this->getJsonErrorResponse([403]);
+        } else if (!$this->isActionAuthorized('read_group_user_permissions', $authenticated))
+            return $this->getJsonErrorResponse([403]);
 
         return $this->getApiJsonResponse([
             'data' => $user->getPermissions(),
@@ -88,11 +88,11 @@ class UserController extends AbstractApiController
         if (!$user instanceof User)
             return $this->getJsonErrorResponse([404]);
 
-        if ($user->getId() === $authenticated->getId())
-            if (!$this->isActionAuthorized('read_own_user_groups', $authenticated, $user))
+        if ($user->getId() === $authenticated->getId()) {
+            if (!$this->isActionAuthorized('read_own_user_groups', $authenticated))
                 return $this->getJsonErrorResponse([403]);
-            else if (!$this->isActionAuthorized('read_group_user_groups', $authenticated, $user))
-                return $this->getJsonErrorResponse([403]);
+        } else if (!$this->isActionAuthorized('read_group_user_groups', $authenticated))
+            return $this->getJsonErrorResponse([403]);
 
         return $this->getApiJsonResponse([
             'data' => $user->getGroupsData(),
