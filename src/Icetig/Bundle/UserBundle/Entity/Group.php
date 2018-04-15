@@ -101,7 +101,7 @@ class Group
 
         if (null !== $this->parent) {
             $parentPermission = $this->parent->getPermissions();
-            if ($permissions && $parentPermission)
+            if ($parentPermission)
                 $permissions = array_merge($permissions, $parentPermission);
         }
 
