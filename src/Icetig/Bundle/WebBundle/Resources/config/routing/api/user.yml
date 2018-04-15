@@ -1,0 +1,7 @@
+api_user_get:
+    path: /{userId}
+    methods: [GET]
+    defaults:
+        _controller: ApiBundle:User:get
+    requirements:
+        userId: '\d+'

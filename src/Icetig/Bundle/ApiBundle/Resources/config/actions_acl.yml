@@ -1,0 +1,58 @@
+parameters:
+
+    actions_acl:
+
+#        List of actions with their needed acl
+        read_own_user_info: []
+
+        read_own_user_groups: []
+
+        update_own_user_info: []
+
+        read_group_user_info:
+            user_info:
+                - read
+            user:
+                - read
+
+        read_group_user_group:
+            user_group:
+                - read
+            user:
+                - read
+
+        update_group_user_info:
+            user_info:
+                - update
+            user:
+                - update
+
+        update_group_user_group:
+            user_group:
+                - update
+            user:
+                - update
+
+        create_group_user:
+            user:
+                - create
+
+        delete_group_user:
+            user:
+                - delete
+
+        update_group_user:
+            user:
+                - update
+
+        read_group_user:
+            user:
+                - read
+
+        read_group_user_full:
+            user_info:
+                - read
+            user_group:
+                - read
+            user:
+                - read

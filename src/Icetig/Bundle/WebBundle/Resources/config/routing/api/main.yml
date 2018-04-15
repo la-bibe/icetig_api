@@ -2,6 +2,10 @@ api_security:
     prefix: /security
     resource: "@WebBundle/Resources/config/routing/api/security.yml"
 
+api_user:
+    prefix: /user
+    resource: "@WebBundle/Resources/config/routing/api/user.yml"
+
 api_homepage:
     path: /
     defaults:

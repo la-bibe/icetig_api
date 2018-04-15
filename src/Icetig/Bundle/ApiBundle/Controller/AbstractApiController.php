@@ -3,6 +3,7 @@
 namespace Icetig\Bundle\ApiBundle\Controller;
 
 use Icetig\Bundle\ApiBundle\Entity\Access;
+use Icetig\Bundle\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -212,5 +213,37 @@ abstract class AbstractApiController extends Controller
         }
 
         return null;
+    }
+
+    /**
+     * Try to authenticate the user based on the request
+     *
+     * @param Request $request
+     *
+     * @return User|null
+     */
+    protected function autoAuthenticateUser(Request $request)
+    {
+        $access = $this->autoAuthenticate($request);
+
+        if ($access instanceof Access)
+            return $access->getUser();
+
+        return null;
+    }
+
+    /**
+     * Test if authenticated user have enough rights to perform an action
+     *
+     * @param string $action    The requested action
+     * @param User $authenticated   The authenticated user
+     * @param User|null $subject    The subject of the action if needed
+     *
+     * @return bool
+     */
+    protected function isActionAuthorized(string $action, User $authenticated, User $subject = null)
+    {
+        // TODO
+        return true;
     }
 }

@@ -3,6 +3,7 @@ imports:
     - { resource: security.yml }
     - { resource: services.yml }
     - { resource: "@ApiBundle/Resources/config/services.xml" }
+    - { resource: "@ApiBundle/Resources/config/actions_acl.yml" }
     - { resource: "@UserBundle/Resources/config/services.xml" }
     - { resource: "@WebBundle/Resources/config/services.xml" }
 
