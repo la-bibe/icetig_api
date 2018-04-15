@@ -4,6 +4,7 @@ namespace Icetig\Bundle\UserBundle\Entity;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Icetig\Bundle\PedagoBundle\Entity\Sanction;
 
 class User
 {
@@ -51,6 +52,16 @@ class User
      * @var Group[]|ArrayCollection
      */
     protected $groups;
+
+    /**
+     * @var Sanction[]|ArrayCollection
+     */
+    protected $sanctions;
+
+    /**
+     * @var Sanction[]|ArrayCollection
+     */
+    protected $issued_sanctions;
 
     /**
      * Get id
@@ -242,5 +253,37 @@ class User
         $data['permissions'] = $this->getPermissions();
 
         return $data;
+    }
+
+    /**
+     * @return ArrayCollection|Sanction[]
+     */
+    public function getSanctions()
+    {
+        return $this->sanctions;
+    }
+
+    /**
+     * @param ArrayCollection|Sanction[] $sanctions
+     */
+    public function setSanctions($sanctions)
+    {
+        $this->sanctions = $sanctions;
+    }
+
+    /**
+     * @return ArrayCollection|Sanction[]
+     */
+    public function getIssuedSanctions()
+    {
+        return $this->issued_sanctions;
+    }
+
+    /**
+     * @param ArrayCollection|Sanction[] $issued_sanctions
+     */
+    public function setIssuedSanctions($issued_sanctions)
+    {
+        $this->issued_sanctions = $issued_sanctions;
     }
 }

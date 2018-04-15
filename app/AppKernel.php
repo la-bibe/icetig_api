@@ -18,6 +18,7 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
             new Icetig\Bundle\ApiBundle\ApiBundle(),
             new Icetig\Bundle\UserBundle\UserBundle(),
+            new Icetig\Bundle\PedagoBundle\PedagoBundle(),
             new Icetig\Bundle\WebBundle\WebBundle(),
         ];
 
