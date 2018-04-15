@@ -263,7 +263,7 @@ class User
         $data = [];
 
         foreach ($this->getSanctions() as $sanction)
-            $data = array_merge($data, $sanction->getShortData());
+            $data[] = $sanction->getShortData();
 
         return $data;
     }
