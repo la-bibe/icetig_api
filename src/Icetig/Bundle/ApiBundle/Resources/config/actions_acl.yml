@@ -3,6 +3,8 @@ parameters:
     actions_acl:
 
 #        List of actions with their needed acl
+        read_own_user: []
+
         read_own_user_info: []
 
         read_own_user_groups: []
@@ -15,7 +17,7 @@ parameters:
             user:
                 - read
 
-        read_group_user_group:
+        read_group_user_groups:
             user_group:
                 - read
             user:
@@ -27,7 +29,7 @@ parameters:
             user:
                 - update
 
-        update_group_user_group:
+        update_group_user_groups:
             user_group:
                 - update
             user:
@@ -55,4 +57,20 @@ parameters:
             user_group:
                 - read
             user:
+                - read
+
+        read_own_user_sanctions: []
+
+        read_group_user_sanctions:
+            user_sanction:
+                - read
+            user:
+                - read
+
+        read_own_user_permissions: []
+
+        read_group_user_permissions:
+            user:
+                - read
+            user_permission:
                 - read

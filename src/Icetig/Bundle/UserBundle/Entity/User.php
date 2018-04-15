@@ -242,15 +242,28 @@ class User
         $data['lastName'] = $this->lastName;
         $data['dateOfBirth'] = $this->dateOfBirth;
         $data['phone'] = $this->dateOfBirth;
-        $data['groups'] = [];
+        return $data;
+    }
+
+    public function getGroupsData()
+    {
+        $data = [];
 
         if (null !== $this->groups) {
             foreach ($this->groups as $group) {
-                $data['groups'][] = $group->getData();
+                $data[] = $group->getData();
             }
         }
 
-        $data['permissions'] = $this->getPermissions();
+        return $data;
+    }
+
+    public function getSanctionsData()
+    {
+        $data = [];
+
+        foreach ($this->getSanctions() as $sanction)
+            $data = array_merge($data, $sanction->getShortData());
 
         return $data;
     }

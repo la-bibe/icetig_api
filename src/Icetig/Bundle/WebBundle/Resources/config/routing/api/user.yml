@@ -5,3 +5,27 @@ api_user_get:
         _controller: ApiBundle:User:get
     requirements:
         userId: '\d+'
+
+api_user_get_groups:
+    path: /{userId}/groups
+    methods: [GET]
+    defaults:
+        _controller: ApiBundle:User:getGroups
+    requirements:
+        userId: '\d+'
+
+api_user_get_permissions:
+    path: /{userId}/permissions
+    methods: [GET]
+    defaults:
+        _controller: ApiBundle:User:getPermissions
+    requirements:
+        userId: '\d+'
+
+api_user_get_sanctions:
+    path: /{userId}/sanctions
+    methods: [GET]
+    defaults:
+        _controller: ApiBundle:User:getSanctions
+    requirements:
+        userId: '\d+'

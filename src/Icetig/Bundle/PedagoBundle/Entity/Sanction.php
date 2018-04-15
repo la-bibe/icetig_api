@@ -53,7 +53,6 @@ class Sanction
      */
     private $task;
 
-
     /**
      * Get id
      *
@@ -238,6 +237,23 @@ class Sanction
     public function setTask(string $task)
     {
         $this->task = $task;
+    }
+
+    public function getShortData()
+    {
+        $data = [];
+
+        $data['id'] = $this->id;
+        $data['date'] = $this->date;
+        $data['subject'] = $this->issuer->getId();
+        $data['issuer'] = $this->issuer->getId();
+        $data['state'] = $this->state;
+        $data['startDate'] = $this->startDate;
+        $data['endDate'] = $this->endDate;
+        $data['reason'] = $this->reason;
+        $data['task'] = $this->task;
+
+        return $data;
     }
 }
 
