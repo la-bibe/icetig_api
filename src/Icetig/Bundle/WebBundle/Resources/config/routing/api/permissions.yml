@@ -1,0 +1,5 @@
+api_permissions_get:
+    path: /
+    methods: [GET]
+    defaults:
+        _controller: ApiBundle:Permissions:get

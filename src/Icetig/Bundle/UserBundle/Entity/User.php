@@ -240,8 +240,6 @@ class User
         $data['email'] = $this->email;
         $data['firstName'] = $this->firstName;
         $data['lastName'] = $this->lastName;
-        $data['dateOfBirth'] = $this->dateOfBirth;
-        $data['phone'] = $this->dateOfBirth;
         return $data;
     }
 

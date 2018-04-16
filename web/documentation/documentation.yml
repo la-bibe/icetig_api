@@ -1,0 +1,329 @@
+swagger: '2.0'
+info:
+  description: pedago.eu API
+  version: 1.0.0
+  title: api.bienveillance.ninja
+  contact:
+    email: fantin.bibas@epitech.eu
+
+paths:
+  /security/access:
+    get:
+      tags:
+      - security
+      summary: Get an access (log in)
+      operationId: getAccess
+      description: |
+        Get an access object, required to use the others endpoints of the API
+      produces:
+      - application/json
+      parameters:
+      - in: query
+        name: stay_connected
+        description: access valid for a bigger amount of time
+        required: false
+        type: boolean
+      responses:
+        200:
+          description: Authentication successfull
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/definitions/Access'
+        401:
+          description: Unauthorized
+    delete:
+      tags:
+      - security
+      summary: Delete an access (log out)
+      operationId: deleteAccess
+      responses:
+        204:
+          description: Access deleted
+        401:
+          description: Unauthorized
+  /user:
+    get:
+      tags:
+      - user
+      summary: Get users
+      operationId: getUserList
+      description: |
+        Get users
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Ok
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        401:
+          description: Unauthorized need to log in
+        403:
+          description: Unauthorized not enough rights
+  /user/{userId}:
+    get:
+      tags:
+      - user
+      summary: Get user
+      operationId: getUser
+      description: |
+        Get an user
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: userId
+        description: Id of the user to get
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Ok
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/definitions/User'
+        401:
+          description: Unauthorized need to log in
+        403:
+          description: Unauthorized not enough rights
+  /user/{userId}/groups:
+    get:
+      tags:
+      - user
+      summary: Get user groups
+      operationId: getUserGroups
+      description: |
+        Get an user groups
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: userId
+        description: Id of the user to get
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Ok
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/Group'
+        401:
+          description: Unauthorized need to log in
+        403:
+          description: Unauthorized not enough rights
+  /user/{userId}/permissions:
+    get:
+      tags:
+      - user
+      summary: Get user permissions
+      operationId: getUserPermissions
+      description: |
+        Get an user permissions
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: userId
+        description: Id of the user to get
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Ok
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/NamedGroupPermission'
+        401:
+          description: Unauthorized need to log in
+        403:
+          description: Unauthorized not enough rights
+  /user/{userId}/sanctions:
+    get:
+      tags:
+      - user
+      summary: Get user sanctions
+      operationId: getUserSanctions
+      description: |
+        Get an user sanctions
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: userId
+        description: Id of the user to get
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Ok
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/Sanction'
+        401:
+          description: Unauthorized need to log in
+        403:
+          description: Unauthorized not enough rights
+  /sanction:
+    get:
+      tags:
+      - sanction
+      summary: Get sanctions
+      operationId: getSanctions
+      description: |
+        Get sanctions
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Ok
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/Sanction'
+        401:
+          description: Unauthorized need to log in
+        403:
+          description: Unauthorized not enough rights
+definitions:
+  Access:
+    type: object
+    required:
+    - user
+    - signatureToken
+    - generationDate
+    - expirationDate
+    properties:
+      user:
+        $ref: '#/definitions/User'
+      signatureToken:
+        type: string
+        example: 9f550cb49125603f716e07b22731e740
+      generationDate:
+        type: integer
+        example: 1523812479
+      expirationDate:
+        type: integer
+        example: 1523813679
+  User:
+    type: object
+    required:
+    - id
+    - email
+    properties:
+      id:
+        type: integer
+        example: 1
+      email:
+        type: string
+        format: email
+        example: fantin.bibas@epitech.eu
+      firstName:
+        type: string
+        example: Fantin
+      lastName:
+        type: string
+        example: Bibas
+  Group:
+    type: object
+    required:
+    - id
+    - name
+    - parent
+    properties:
+      id:
+        type: integer
+        example: 1
+      name:
+        type: string
+        example: Tek2
+      parent:
+        $ref: '#/definitions/Group'
+  Permission:
+      type: object
+      required:
+      - create
+      - read
+      - update
+      - delete
+      properties:
+        create:
+          type: boolean
+          example: true
+        read:
+          type: boolean
+          example: true
+        update:
+          type: boolean
+          example: true
+        delete:
+          type: boolean
+          example: true
+  GroupPermission:
+      type: array
+      items:
+        $ref: '#/definitions/Permission'
+  NamedGroupPermission:
+      type: array
+      items:
+        $ref: '#/definitions/GroupPermission'
+  Sanction:
+    type: object
+    required:
+    - id
+    - date
+    - subject
+    - issuer
+    - state
+    - startDate
+    - endDate
+    - reason
+    - task
+    properties:
+      id:
+        type: integer
+      date:
+        type: string
+        format: date-time
+      subject:
+        $ref: '#/definitions/User'
+      issuer:
+        $ref: '#/definitions/User'
+      state:
+        type: integer
+      startDate:
+        type: string
+        format: date-time
+      endDate:
+        type: string
+        format: date-time
+      reason:
+        type: string
+      task:
+        type: string
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+basePath: /FantinBibas/api.bienveillance.ninja/1.0.0
+schemes:
+ - https
