@@ -245,7 +245,7 @@ class Sanction
 
         $data['id'] = $this->id;
         $data['date'] = $this->date;
-        $data['subject'] = $this->issuer->getId();
+        $data['subject'] = $this->subject->getId();
         $data['issuer'] = $this->issuer->getId();
         $data['state'] = $this->state;
         $data['startDate'] = $this->startDate;
