@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class SanctionController extends AbstractApiController
 {
-    public function getAction(Request $request)
+    public function listAction(Request $request)
     {
         $authenticated = $this->autoAuthenticateUser($request);
 
@@ -22,7 +22,7 @@ class SanctionController extends AbstractApiController
         $sanctionRepository = $this->getDoctrine()->getRepository('PedagoBundle:Sanction');
 
         foreach ($groups as $group) {
-            if ($this->isActionAuthorized('read_group_user_sanctions', $authenticated, $group)) {
+            if ($this->isGroupActionAuthorized('read_group_user_sanctions', $authenticated, $group)) {
                 $groupSanctions = $sanctionRepository->getGroupSanctions($group);
                 $sanctions = array_unique(array_merge($sanctions, $groupSanctions), SORT_REGULAR);
             }

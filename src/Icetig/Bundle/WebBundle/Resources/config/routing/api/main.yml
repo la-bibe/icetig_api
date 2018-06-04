@@ -2,6 +2,12 @@ api_security:
     prefix: /security
     resource: "@WebBundle/Resources/config/routing/api/security.yml"
 
+#api_user_list:
+#    path: /user
+#    methods: [GET]
+#    defaults:
+#        _controller: ApiBundle:User:list
+
 api_user:
     prefix: /user
     resource: "@WebBundle/Resources/config/routing/api/user.yml"
@@ -10,9 +16,15 @@ api_permission:
     prefix: /permission
     resource: "@WebBundle/Resources/config/routing/api/permission.yml"
 
-api_sanction:
-    prefix: /sanction
-    resource: "@WebBundle/Resources/config/routing/api/sanction.yml"
+api_sanction_list:
+    path: /sanction
+    methods: [GET]
+    defaults:
+        _controller: ApiBundle:Sanction:list
+
+#api_sanction:
+#    prefix: /sanction
+#    resource: "@WebBundle/Resources/config/routing/api/sanction.yml"
 
 api_homepage:
     path: /
