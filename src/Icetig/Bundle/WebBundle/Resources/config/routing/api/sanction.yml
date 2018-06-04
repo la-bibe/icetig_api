@@ -1,0 +1,5 @@
+api_sanction_get:
+    path: /
+    methods: [GET]
+    defaults:
+        _controller: ApiBundle:Sanction:get

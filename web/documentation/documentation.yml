@@ -47,7 +47,7 @@ paths:
     get:
       tags:
       - user
-      summary: Get users
+      summary: Get users -- TODO --
       operationId: getUserList
       description: |
         Get users

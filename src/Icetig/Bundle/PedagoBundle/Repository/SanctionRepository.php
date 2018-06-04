@@ -3,6 +3,7 @@
 namespace Icetig\Bundle\PedagoBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Icetig\Bundle\UserBundle\Entity\Group;
 
 /**
  * SanctionRepository
@@ -12,4 +13,18 @@ use Doctrine\ORM\EntityRepository;
  */
 class SanctionRepository extends EntityRepository
 {
+    public function getGroupSanctions(Group $group)
+    {
+        $qb = $this->_em->createQueryBuilder();
+
+        $result = $qb->select('s')
+            ->from('PedagoBundle:Sanction', 's')
+            ->innerJoin('s.subject', 'u')
+            ->innerJoin('u.groups', 'g')
+            ->where('g = :group')
+            ->setParameter('group', $group)
+            ->getQuery()
+            ->getResult();
+        return $result;
+    }
 }

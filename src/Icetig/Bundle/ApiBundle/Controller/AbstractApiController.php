@@ -3,6 +3,7 @@
 namespace Icetig\Bundle\ApiBundle\Controller;
 
 use Icetig\Bundle\ApiBundle\Entity\Access;
+use Icetig\Bundle\UserBundle\Entity\Group;
 use Icetig\Bundle\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -235,7 +236,7 @@ abstract class AbstractApiController extends Controller
     /**
      * Test if authenticated user have enough rights to perform an action
      *
-     * @param string $action    The requested action
+     * @param string $action        The requested action
      * @param User $authenticated   The authenticated user
      * @param User|null $subject    The subject of the action if needed
      *
@@ -247,5 +248,22 @@ abstract class AbstractApiController extends Controller
         $securityProvider = $this->get('icetig_api.provider.security');
 
         return $securityProvider->isActionAuthorized($action, $authenticated, $subject, $actionsAcl);
+    }
+
+    /**
+     * Test if authenticated user have enough rights to perform an action on a group
+     *
+     * @param string $action        The requested action
+     * @param User $authenticated   The authenticated user
+     * @param Group $subject        The subject of the action
+     *
+     * @return bool
+     */
+    protected function isGroupActionAuthorized(string $action, User $authenticated, Group $subject = null)
+    {
+        $actionsAcl = $this->container->getParameter('actions_acl');
+        $securityProvider = $this->get('icetig_api.provider.security');
+
+        return $securityProvider->isGroupActionAuthorized($action, $authenticated, $subject, $actionsAcl);
     }
 }

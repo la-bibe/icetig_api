@@ -93,11 +93,35 @@ class SecurityProvider
                     return false;
                 foreach ($subject->getGroups() as $group) {
                     if ($group instanceof Group
-                        && (!isset($permissions[$neededPermission][$group])
-                            || !isset($permissions[$neededPermission][$group][$ace])
-                            || !$permissions[$neededPermission][$group][$ace]))
+                        && (!isset($permissions[$neededPermission][$group->getId()])
+                            || !isset($permissions[$neededPermission][$group->getId()][$ace])
+                            || !$permissions[$neededPermission][$group->getId()][$ace]))
                         return false;
                 }
+            }
+        }
+        return true;
+    }
+
+    public function isGroupActionAuthorized(string $action, User $authenticated, Group $subject, array $actionsAcl = [])
+    {
+        if (!isset($actionsAcl[$action]))
+            return false;
+
+        $permissions = $authenticated->getPermissions();
+
+        foreach ($actionsAcl[$action] as $neededPermission => $acl) {
+            if (!isset($permissions[$neededPermission]))
+                return false;
+            foreach ($acl as $ace) {
+                if (isset($permissions[$neededPermission]['*'])
+                    && isset($permissions[$neededPermission]['*'][$ace])
+                    && $permissions[$neededPermission]['*'][$ace])
+                    continue;
+                if (!isset($permissions[$neededPermission][$subject->getId()])
+                    || !isset($permissions[$neededPermission][$subject->getId()][$ace])
+                    || !$permissions[$neededPermission][$subject->getId()][$ace])
+                    return false;
             }
         }
         return true;

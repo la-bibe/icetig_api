@@ -6,9 +6,13 @@ api_user:
     prefix: /user
     resource: "@WebBundle/Resources/config/routing/api/user.yml"
 
-api_permissions:
-    prefix: /permissions
-    resource: "@WebBundle/Resources/config/routing/api/permissions.yml"
+api_permission:
+    prefix: /permission
+    resource: "@WebBundle/Resources/config/routing/api/permission.yml"
+
+api_sanction:
+    prefix: /sanction
+    resource: "@WebBundle/Resources/config/routing/api/sanction.yml"
 
 api_homepage:
     path: /
