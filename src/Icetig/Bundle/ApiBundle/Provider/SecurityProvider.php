@@ -126,4 +126,15 @@ class SecurityProvider
         }
         return true;
     }
+
+    /**
+     * @param string $password
+     * @param string $salt
+     *
+     * @return string
+     */
+    public function hashPassword(string $password, string $salt)
+    {
+        return hash('sha512', "{$password}{$salt}");
+    }
 }

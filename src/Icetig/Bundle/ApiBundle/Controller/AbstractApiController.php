@@ -80,14 +80,15 @@ abstract class AbstractApiController extends Controller
     /**
      * Generate error response respecting http://jsonapi.org/ specifications
      * given an array of error codes. The function is meant to be enhanced by
-     * logging all the errors in the db and describing them better
+     * logging all the errors in the db and describing them better # TODO
      *
      * @param array $errorCodes
      * @param array $details
+     * @param array $infos
      *
      * @return JsonResponse
      */
-    protected function getJsonErrorResponse(array $errorCodes = [], array $details = [])
+    protected function getJsonErrorResponse(array $errorCodes = [], array $details = [], array $infos = [])
     {
         $data = [];
         $data['errors'] = [];
@@ -100,7 +101,7 @@ abstract class AbstractApiController extends Controller
             500 => 0,
         ];
 
-        foreach ($errorCodes as $errorCode) {
+        foreach ($errorCodes as $idx => $errorCode) {
             if (!array_key_exists($errorCode, self::HTTP_CODES)) {
                 $errorCode = 500;
             }
@@ -115,7 +116,7 @@ abstract class AbstractApiController extends Controller
                     'about' => null,
                 ],
                 'code' => null,
-                'detail' => null,
+                'detail' => isset($details[$idx]) ? $details[$idx] : null,
                 'source' => null,
                 'meta' => null,
             ];
@@ -134,7 +135,7 @@ abstract class AbstractApiController extends Controller
 
         if (401 === $responseStatus) {
             $wwwAuthenticateValue = 'Basic realm:"';
-            $wwwAuthenticateValue .= isset($details['www-authenticate']) ?
+            $wwwAuthenticateValue .= isset($infos['www-authenticate']) ?
                 $details['www-authenticate'] :
                 'Can\'t access to the resource without proper authentication';
             $wwwAuthenticateValue .= '"';

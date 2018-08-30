@@ -4,9 +4,12 @@ namespace Icetig\Bundle\UserBundle\Entity;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Icetig\Bundle\ApiBundle\Entity\AbstractApiEntity;
+use Icetig\Bundle\ApiBundle\Exception\IncorrectPropertyException;
 use Icetig\Bundle\PedagoBundle\Entity\Sanction;
+use Symfony\Component\Validator\Constraints as Assert;
 
-class User
+class User extends AbstractApiEntity
 {
     /**
      * @var int
@@ -15,11 +18,20 @@ class User
 
     /**
      * @var string
+     *
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @Assert\Email()
+     *
+     * TODO Assert good Epitech address / valid
      */
     protected $email;
 
     /**
      * @var string
+     *
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
      */
     protected $password;
 
@@ -64,11 +76,23 @@ class User
     protected $issued_sanctions;
 
     /**
+     * User constructor.
+     *
+     * @param array $parameters
+     *
+     * @throws IncorrectPropertyException
+     */
+    public function __construct(array $parameters = [])
+    {
+        $this->update($parameters);
+    }
+
+    /**
      * Get id
      *
      * @return int
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -99,10 +123,12 @@ class User
 
     /**
      * @param string $password
+     * @throws \Exception
      */
     public function setPassword(string $password)
     {
-        $this->password = $password;
+        $this->setSalt();
+        $this->password = hash('sha512', "{$password}{$this->getSalt()}");
     }
 
     /**
@@ -114,17 +140,17 @@ class User
     }
 
     /**
-     * @param string $salt
+     * @throws \Exception
      */
-    public function setSalt(string $salt)
+    public function setSalt()
     {
-        $this->salt = $salt;
+        $this->salt = hash('sha512', bin2hex(random_bytes(random_int(50, 200))));
     }
 
     /**
      * @return string
      */
-    public function getFirstName(): string
+    public function getFirstName(): ?string
     {
         return $this->firstName;
     }
@@ -132,7 +158,7 @@ class User
     /**
      * @param string $firstName
      */
-    public function setFirstName(string $firstName)
+    public function setFirstName(?string $firstName)
     {
         $this->firstName = $firstName;
     }
@@ -140,7 +166,7 @@ class User
     /**
      * @return string
      */
-    public function getLastName(): string
+    public function getLastName(): ?string
     {
         return $this->lastName;
     }
@@ -148,7 +174,7 @@ class User
     /**
      * @param string $lastName
      */
-    public function setLastName(string $lastName)
+    public function setLastName(?string $lastName)
     {
         $this->lastName = $lastName;
     }
@@ -156,7 +182,7 @@ class User
     /**
      * @return DateTime
      */
-    public function getDateOfBirth(): DateTime
+    public function getDateOfBirth(): ?DateTime
     {
         return $this->dateOfBirth;
     }
@@ -164,7 +190,7 @@ class User
     /**
      * @param DateTime $dateOfBirth
      */
-    public function setDateOfBirth(DateTime $dateOfBirth)
+    public function setDateOfBirth(?DateTime $dateOfBirth)
     {
         $this->dateOfBirth = $dateOfBirth;
     }
@@ -172,7 +198,7 @@ class User
     /**
      * @return string
      */
-    public function getPhone(): string
+    public function getPhone(): ?string
     {
         return $this->phone;
     }
@@ -180,7 +206,7 @@ class User
     /**
      * @param string $phone
      */
-    public function setPhone(string $phone)
+    public function setPhone(?string $phone)
     {
         $this->phone = $phone;
     }
@@ -233,14 +259,19 @@ class User
         return $permissionsArray;
     }
 
+    /**
+     * // TODO handle throw everywhere
+     * @return array
+     * @throws IncorrectPropertyException
+     */
     public function getData()
     {
-        $data = [];
-        $data['id'] = $this->id;
-        $data['email'] = $this->email;
-        $data['firstName'] = $this->firstName;
-        $data['lastName'] = $this->lastName;
-        return $data;
+        return $this->getPropertiesData([
+            'id',
+            'email',
+            'firstName',
+            'lastName',
+        ]);
     }
 
     public function getGroupsData()

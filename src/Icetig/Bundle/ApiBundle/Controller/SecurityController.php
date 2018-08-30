@@ -16,6 +16,7 @@ class SecurityController extends AbstractApiController
         if (!($authenticated = $securityProvider->getAuthenticated($request, $this->getDoctrine())) instanceof User) {
             return $this->getJsonErrorResponse(
                 [401],
+                [],
                 [
                     'www-authenticate' => 'Can\'t create access for provided tokens',
                 ]
@@ -44,7 +45,7 @@ class SecurityController extends AbstractApiController
             $access->getExpirationDate(),
             '/',
             null,
-            true
+            false
         );
 
         $response->headers->setCookie($accessCookie);

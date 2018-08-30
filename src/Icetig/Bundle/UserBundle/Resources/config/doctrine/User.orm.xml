@@ -7,9 +7,9 @@
 
     <field name="email" unique="true" />
 
-    <field name="password" nullable="true" />
+    <field name="password" />
 
-    <field name="salt" nullable="true" />
+    <field name="salt" />
 
     <field name="firstName" column="first_name" nullable="true" />
 

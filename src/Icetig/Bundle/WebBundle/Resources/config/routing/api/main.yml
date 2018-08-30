@@ -8,6 +8,12 @@ api_security:
 #    defaults:
 #        _controller: ApiBundle:User:list
 
+api_user_create:
+    path: /user
+    methods: [POST]
+    defaults:
+        _controller: ApiBundle:User:create
+
 api_user:
     prefix: /user
     resource: "@WebBundle/Resources/config/routing/api/user.yml"
